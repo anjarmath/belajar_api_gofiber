@@ -24,8 +24,22 @@ func main() {
 	// Inisialisasi Database
 	db.InitDB()
 
+	// Inisialisasi Store
+	db.InitStore()
+
+	// Tambahkan session ke fiber context
+	app.Use(func(c *fiber.Ctx) error {
+		sess, err := db.Store.Get(c)
+		if err != nil {
+			return err
+		}
+		c.Locals("session", sess)
+		return c.Next()
+	})
+
 	// Panggil Route
 	routes.SetupBookRoute(app)
+	routes.SetupAuthRoute(app)
 
 	app.Listen(":3000")
 }

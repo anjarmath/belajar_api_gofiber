@@ -21,6 +21,7 @@ func InitDB() {
 
 	database.AutoMigrate(
 		&model.Book{},
+		&model.User{},
 	)
 
 	DB = database

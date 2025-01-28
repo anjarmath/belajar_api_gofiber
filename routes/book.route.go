@@ -2,6 +2,7 @@ package routes
 
 import (
 	"github.com/anjarmath/01_golang_api_sederhana/controller"
+	"github.com/anjarmath/01_golang_api_sederhana/middleware"
 	"github.com/anjarmath/01_golang_api_sederhana/repository"
 	"github.com/gofiber/fiber/v2"
 )
@@ -14,18 +15,20 @@ func SetupBookRoute(r *fiber.App) {
 	bookRepository := repository.NewBookRepositoryPostgres()
 	bookController := controller.NewBookController(bookRepository)
 
+	book := r.Group("/book", middleware.AuthMiddleware())
+
 	// Get Buku
-	r.Get("/book", bookController.GetBook)
+	book.Get("/", bookController.GetBook)
 
 	// Get buku berdasarkan ID
-	r.Get("/book/:id", bookController.GetBookByID)
+	book.Get("/:id", bookController.GetBookByID)
 
 	// Post Buku
-	r.Post("/book", bookController.AddBook)
+	book.Post("/", bookController.AddBook)
 
 	// Update buku
-	r.Patch("/book/:id", bookController.UpdateBook)
+	book.Patch("/:id", bookController.UpdateBook)
 
 	// Hapus buku
-	r.Delete("/book/:id", bookController.DeleteBook)
+	book.Delete("/:id", bookController.DeleteBook)
 }
