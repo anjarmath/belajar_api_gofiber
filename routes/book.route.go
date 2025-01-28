@@ -11,12 +11,21 @@ func SetupBookRoute(r *fiber.App) {
 		return c.SendString("Belajar bareng API Sederhana!")
 	})
 
-	bookRepository := repository.NewBookRepository()
+	bookRepository := repository.NewBookRepositoryPostgres()
 	bookController := controller.NewBookController(bookRepository)
 
 	// Get Buku
 	r.Get("/book", bookController.GetBook)
 
+	// Get buku berdasarkan ID
+	r.Get("/book/:id", bookController.GetBookByID)
+
 	// Post Buku
 	r.Post("/book", bookController.AddBook)
+
+	// Update buku
+	r.Patch("/book/:id", bookController.UpdateBook)
+
+	// Hapus buku
+	r.Delete("/book/:id", bookController.DeleteBook)
 }
