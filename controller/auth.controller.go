@@ -104,6 +104,7 @@ func (ac authController) Login(c *fiber.Ctx) error {
 
 	return c.JSON(fiber.Map{
 		"message": "Login sukses",
+		"user":    user,
 	})
 }
 

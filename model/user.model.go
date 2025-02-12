@@ -8,12 +8,15 @@ import (
 )
 
 type User struct {
-	Id        uuid.UUID  `gorm:"type:uuid;default:uuid_generate_v4();primaryKey" json:"id"`
-	Username  string     `json:"username"`
-	Name      string     `json:"name"`
-	Password  string     `json:"-"`
-	CreatedAt time.Time  `gorm:"default:now();" json:"created_at"`
-	UpdatedAt *time.Time `json:"updated_at"`
+	Id            uuid.UUID  `gorm:"type:uuid;default:uuid_generate_v4();primaryKey" json:"id"`
+	Username      string     `json:"username"`
+	Name          string     `json:"name"`
+	Password      string     `json:"-"`
+	Books         []Book     `gorm:"foreignKey:UserId;constraint:OnDelete:SET NULL;" json:"books"`
+	FavoriteBook  *Book      `gorm:"foreignKey:FavoriteByUserId;constraint:OnDelete:SET NULL;" json:"favorite_book"`
+	WishlistBooks []*Book    `gorm:"many2many:user_book;" json:"wishlist_books"`
+	CreatedAt     time.Time  `gorm:"default:now();" json:"created_at"`
+	UpdatedAt     *time.Time `json:"updated_at"`
 }
 
 func (u *User) HashPassword() error {

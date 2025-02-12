@@ -22,7 +22,7 @@ func (b bookRepositoryImplPostgres) DeleteBook(id string) error {
 // GetBookByID implements BookRepository.
 func (b bookRepositoryImplPostgres) GetBookByID(id string) (*model.Book, error) {
 	book := new(model.Book)
-	if err := db.DB.First(book, "id = ?", id).Error; err != nil {
+	if err := db.DB.Preload("InterestedUsers").First(book, "id = ?", id).Error; err != nil {
 		return nil, err
 	}
 	return book, nil
@@ -31,7 +31,7 @@ func (b bookRepositoryImplPostgres) GetBookByID(id string) (*model.Book, error) 
 // GetBooks implements BookRepository.
 func (b bookRepositoryImplPostgres) GetBooks() (*[]model.Book, error) {
 	books := new([]model.Book)
-	if err := db.DB.Find(books).Error; err != nil {
+	if err := db.DB.Preload("InterestedUsers").Find(books).Error; err != nil {
 		return nil, err
 	}
 	return books, nil

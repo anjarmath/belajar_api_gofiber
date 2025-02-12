@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/anjarmath/01_golang_api_sederhana/model"
 	"github.com/anjarmath/01_golang_api_sederhana/repository"
+	"github.com/anjarmath/01_golang_api_sederhana/utils"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -54,6 +55,9 @@ func (bc bookController) AddBook(c *fiber.Ctx) error {
 			Message: "Mohon isikan data dengan benar",
 		})
 	}
+
+	id := utils.GetIdFromSession(c)
+	book.UserId = id
 
 	err := bc.bookRepository.AddBook(book)
 	if err != nil {
